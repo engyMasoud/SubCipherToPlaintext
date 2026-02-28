@@ -1,6 +1,4 @@
-
 cipher = input("Enter cipher text: ")
-plaintext = ""
 
 #frequecy dta found online for english language letters
 standard_letter_frequency = {
@@ -60,32 +58,44 @@ cipher_letter_count = {
     'Y': 0,
     'Z': 0
 }
+
 #loop through the cipher text and count the frequency of each letter
 for letter in cipher:
     if letter in cipher_letter_count:
         cipher_letter_count[letter] += 1
 
-print("Cipher Letter Count:", cipher_letter_count)
-#find the letter with the highest and second highest frequency in the cipher text
-largest_letter = max(cipher_letter_count, key=cipher_letter_count.get)
-second_largest_letter = max((letter for letter in cipher_letter_count if letter != largest_letter), key=cipher_letter_count.get)
+# sorts by freq and maps cipher letters to english letters
+sorted_cipher_letters = sorted(cipher_letter_count, key=lambda letter: cipher_letter_count[letter], reverse=True)
+sorted_english_letters = sorted(standard_letter_frequency, key=lambda letter: standard_letter_frequency[letter], reverse=True)
 
-#replace the letter with the highest frequency in the cipher text with 'E' and the second highest with 'T'
-print(f"Will replace highest letter count '{largest_letter}' with 'E'")
-print(f"Will replace second highest letter count '{second_largest_letter}' with 'T'")
+print(f"Letter | Count")
+print(f"-------|------")
+for letter in sorted_cipher_letters:
+    print(f"   {letter}   |   {cipher_letter_count[letter]}")
 
-#replace the letters in the cipher text and print the updated cipher text
-updated_cipher = cipher.replace(largest_letter, 'E').replace(second_largest_letter, 'T')
-print("Updated Cipher:", updated_cipher)
 
-#find the letter with the third highest frequency in the cipher text and replace it with 'A' and update cipher text
-third_largest_letter = max((letter for letter in cipher_letter_count if letter != largest_letter and letter != second_largest_letter), key=cipher_letter_count.get)
-print(f"Will replace third highest letter count '{third_largest_letter}' with 'A'")
-updated_cipher = updated_cipher.replace(third_largest_letter, 'A')
-print("Updated Cipher:", updated_cipher)
+mapping = dict(zip(sorted_cipher_letters, sorted_english_letters))
 
-#find the letter with the fourth highest frequency in the cipher text and replace it with 'O' and update cipher text
-fourth_largest_letter = max((letter for letter in cipher_letter_count if letter != largest_letter and letter != second_largest_letter and letter != third_largest_letter), key=cipher_letter_count.get)
-print(f"Will replace fourth highest letter count '{fourth_largest_letter}' with 'O'")
-updated_cipher = updated_cipher.replace(fourth_largest_letter, 'O')
-print("Updated Cipher:", updated_cipher)
+deciphered = ""
+for letter in cipher:
+    deciphered = deciphered + mapping.get(letter, letter)
+
+print(deciphered)
+
+# manual replacement feature that prompts user
+while True:
+    answer = input("Would you like to make a replacement? (y or n)").lower()
+    if answer == "n":
+        break
+    elif answer == "y":
+        print(f"Cipher:     {cipher}")
+        print(f"Deciphered: {deciphered}")
+        originalLetter = input("What letter would you like to replace from the original cipher?").upper()
+        replacementLetter = input("What letter would you like to replace it with?").upper()
+        mapping[originalLetter] = replacementLetter
+        deciphered = ""
+        for letter in cipher:
+            deciphered = deciphered + mapping.get(letter, letter)
+        print(deciphered)
+    
+
