@@ -1,3 +1,5 @@
+#Group 6: Engy Masoud, Nicole Perez, Haruka Miyazaki
+
 #prompts user to enter cipher text
 cipher = input("Enter cipher text: ")
 print()
