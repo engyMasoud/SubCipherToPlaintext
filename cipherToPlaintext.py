@@ -1,6 +1,13 @@
-cipher = input("Enter cipher text: ")
+#Group 6: Engy Masoud, Nicole Perez, Haruka Miyazaki
 
-#frequecy dta found online for english language letters
+#prompts user to enter cipher text
+cipher = input("Enter cipher text: ")
+print()
+
+#sets variable to count the total number of letters (later used to calculate frequency) 
+total_count_of_letters = 0
+
+#frequency data found online for english language letters
 standard_letter_frequency = {
     'A': 8.17,
     'B': 1.49,
@@ -60,42 +67,65 @@ cipher_letter_count = {
 }
 
 #loop through the cipher text and count the frequency of each letter
+#also counting the total number of letters in the cipher text here as well
 for letter in cipher:
     if letter in cipher_letter_count:
         cipher_letter_count[letter] += 1
+        total_count_of_letters += 1
 
-# sorts by freq and maps cipher letters to english letters
-sorted_cipher_letters = sorted(cipher_letter_count, key=lambda letter: cipher_letter_count[letter], reverse=True)
+#sorts by freq and maps cipher letters to english letters
+sorted_cipher_letters = sorted(cipher_letter_count, key=lambda letter: cipher_letter_count[letter], reverse=True) # in descending order
 sorted_english_letters = sorted(standard_letter_frequency, key=lambda letter: standard_letter_frequency[letter], reverse=True)
 
-print(f"Letter | Count")
-print(f"-------|------")
+#prints out the frequency of each letter in the inputted cipher text 
+#(frequency is both in counts and percentages)
+print(f"Letter | Count | Percent(%)")
+print(f"-------|-------|-----------")
 for letter in sorted_cipher_letters:
-    print(f"   {letter}   |   {cipher_letter_count[letter]}")
+    #doing the calculation for the frequency in percentage here 
+    count = cipher_letter_count[letter]
+    frequency_in_percent = (count / total_count_of_letters) * 100
+    print(f"   {letter}   |   {cipher_letter_count[letter]}   |  {frequency_in_percent:.2f} ")
 
-
+#mapping the sorted cipher letters to the english for decrypting
 mapping = dict(zip(sorted_cipher_letters, sorted_english_letters))
 
+#doing the actual decrypting here and printing out the result 
 deciphered = ""
 for letter in cipher:
     deciphered = deciphered + mapping.get(letter, letter)
 
-print(deciphered)
+print()
+print(f"Deciphered Text Based on Frequency Only: {deciphered}")
 
-# manual replacement feature that prompts user
+#manual replacement feature that prompts user
 while True:
     answer = input("Would you like to make a replacement? (y or n)").lower()
     if answer == "n":
         break
     elif answer == "y":
-        print(f"Cipher:     {cipher}")
+        print()
+        print(f"  Ciphered: {cipher}")
         print(f"Deciphered: {deciphered}")
-        originalLetter = input("What letter would you like to replace from the original cipher?").upper()
-        replacementLetter = input("What letter would you like to replace it with?").upper()
-        mapping[originalLetter] = replacementLetter
+        print()
+        originalLetter = input("What deciphered letter would you like to replace? ").upper()
+        replacementLetter = input("What letter would you like to replace it with? ").upper()
+        matches = [c for c, d in mapping.items() if d == originalLetter]
+        if not matches:
+            print(f"'{originalLetter}' not found in current deciphered mapping.")
+        elif len(matches) == 1:
+            mapping[matches[0]] = replacementLetter
+        # if there are multiple letters mapped to one, then it uses the original cipher to break the tie
+        else:
+            print(f"Multiple cipher letters map to {originalLetter}: {', '.join(matches)}")
+            cipherLetter = input("Which cipher letter do you want to update? ").upper()
+            if cipherLetter in matches:
+                mapping[cipherLetter] = replacementLetter
+            else:
+                print(f"'{cipherLetter}' is not one of the options.")
         deciphered = ""
         for letter in cipher:
             deciphered = deciphered + mapping.get(letter, letter)
-        print(deciphered)
+        print(f"Deciphered Text: {deciphered}")
     
 
