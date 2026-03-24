@@ -74,7 +74,7 @@ for letter in cipher:
         total_count_of_letters += 1
 
 #sorts by freq and maps cipher letters to english letters
-sorted_cipher_letters = sorted(cipher_letter_count, key=lambda letter: cipher_letter_count[letter], reverse=True) # in descending order
+sorted_cipher_letters = sorted(cipher_letter_count, key=lambda letter: cipher_letter_count[letter], reverse=True)
 sorted_english_letters = sorted(standard_letter_frequency, key=lambda letter: standard_letter_frequency[letter], reverse=True)
 
 #prints out the frequency of each letter in the inputted cipher text 
@@ -97,6 +97,7 @@ for letter in cipher:
 
 print()
 print(f"Deciphered Text Based on Frequency Only: {deciphered}")
+print()
 
 #manual replacement feature that prompts user
 while True:
@@ -105,24 +106,13 @@ while True:
         break
     elif answer == "y":
         print()
-        print(f"  Ciphered: {cipher}")
+        print(f"Cipher:     {cipher}")
         print(f"Deciphered: {deciphered}")
         print()
-        originalLetter = input("What deciphered letter would you like to replace? ").upper()
+        originalLetter = input("What letter would you like to replace from the original cipher? ").upper()
         replacementLetter = input("What letter would you like to replace it with? ").upper()
-        matches = [c for c, d in mapping.items() if d == originalLetter]
-        if not matches:
-            print(f"'{originalLetter}' not found in current deciphered mapping.")
-        elif len(matches) == 1:
-            mapping[matches[0]] = replacementLetter
-        # if there are multiple letters mapped to one, then it uses the original cipher to break the tie
-        else:
-            print(f"Multiple cipher letters map to {originalLetter}: {', '.join(matches)}")
-            cipherLetter = input("Which cipher letter do you want to update? ").upper()
-            if cipherLetter in matches:
-                mapping[cipherLetter] = replacementLetter
-            else:
-                print(f"'{cipherLetter}' is not one of the options.")
+        print()
+        mapping[originalLetter] = replacementLetter
         deciphered = ""
         for letter in cipher:
             deciphered = deciphered + mapping.get(letter, letter)
