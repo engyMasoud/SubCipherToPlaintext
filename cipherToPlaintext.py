@@ -3,6 +3,7 @@
 #prompts user to enter cipher text
 cipher = input("Enter cipher text: ")
 print()
+print(f"Entered Cipher Text: {cipher}")
 
 #sets variable to count the total number of letters (later used to calculate frequency) 
 total_count_of_letters = 0
@@ -69,6 +70,7 @@ cipher_letter_count = {
 #loop through the cipher text and count the frequency of each letter
 #also counting the total number of letters in the cipher text here as well
 for letter in cipher:
+    letter = letter.upper()
     if letter in cipher_letter_count:
         cipher_letter_count[letter] += 1
         total_count_of_letters += 1
@@ -103,19 +105,25 @@ print()
 while True:
     answer = input("Would you like to make a replacement? (y or n)").lower()
     if answer == "n":
+        print()
+        print(f"Final Deciphered Text: {deciphered}")
         break
     elif answer == "y":
         print()
-        print(f"Cipher:     {cipher}")
         print(f"Deciphered: {deciphered}")
         print()
-        originalLetter = input("What letter would you like to replace from the original cipher? ").upper()
-        replacementLetter = input("What letter would you like to replace it with? ").upper()
+        replacementLetterA = input("What letter would you like to replace? ").upper()
+        replacementLetterB = input("What letter would you like to replace it with? ").upper()
         print()
-        mapping[originalLetter] = replacementLetter
+        for letter in mapping:
+            if mapping[letter] == replacementLetterA:
+                mapping[letter] = replacementLetterB
+            elif mapping[letter] == replacementLetterB:
+                mapping[letter] = replacementLetterA
         deciphered = ""
         for letter in cipher:
             deciphered = deciphered + mapping.get(letter, letter)
         print(f"Deciphered Text: {deciphered}")
+        print()
     
 
